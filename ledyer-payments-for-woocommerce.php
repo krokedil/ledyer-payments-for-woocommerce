@@ -57,6 +57,8 @@ add_action(
 	}
 );
 
+add_action( 'woocommerce_blocks_loaded', 'register_payment_block' );
+
 /**
  * Require the autoloader, if it does not exist fail gracefully and output an error.
  * If Debug is enabled, then log to the error log as well.
@@ -117,4 +119,27 @@ add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $ledyer
  */
 function Ledyer_Payments() {  // phpcs:ignore -- allow non-snake case function name.
 	return Plugin::get_instance();
+}
+
+/**
+ * Register the Checkout blocks method.
+ */
+function register_payment_block() {
+	if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
+		require_once LEDYER_PAYMENTS_PLUGIN_PATH . '/blocks/src/checkout/class-ledyer-checkout-block.php';
+
+		$settings                    = get_option( 'woocommerce_ledyer_payments_settings', array() );
+		$main_payment_method_enabled = $settings['enabled'] ?? 'no';
+
+		$payment_methods = array(
+			'ledyer_payments' => 'yes' === $main_payment_method_enabled,
+		);
+
+		add_action(
+			'woocommerce_blocks_payment_method_type_registration',
+			function ( $payment_method_registry ) use ( $payment_methods ) {
+				$payment_method_registry->register( new Ledyer_Checkout_Block( $payment_methods ) );
+			}
+		);
+	}
 }

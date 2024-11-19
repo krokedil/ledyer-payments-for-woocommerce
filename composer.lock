@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "188679acb1ff9557a23f5a78e2e9e407",
+    "content-hash": "c19493a15f849dd625f09f5d12429412",
     "packages": [],
     "packages-dev": [
         {
@@ -161,12 +161,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "3a6b9a42cd8f8771bd4295d13e1423fa7f3d942c"
+                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/3a6b9a42cd8f8771bd4295d13e1423fa7f3d942c",
-                "reference": "3a6b9a42cd8f8771bd4295d13e1423fa7f3d942c",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/123267b2c49fbf30d78a7b2d333f6be754b94845",
+                "reference": "123267b2c49fbf30d78a7b2d333f6be754b94845",
                 "shasum": ""
             },
             "require": {
@@ -206,7 +206,7 @@
             ],
             "support": {
                 "issues": "https://github.com/myclabs/DeepCopy/issues",
-                "source": "https://github.com/myclabs/DeepCopy/tree/1.12.0"
+                "source": "https://github.com/myclabs/DeepCopy/tree/1.12.1"
             },
             "funding": [
                 {
@@ -214,7 +214,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-06-12T14:39:25+00:00"
+            "time": "2024-11-08T17:47:46+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -395,16 +395,16 @@
         },
         {
             "name": "php-stubs/woocommerce-stubs",
-            "version": "v8.9.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-stubs/woocommerce-stubs.git",
-                "reference": "2f5be3f363ff3d02b4e29404c7895d9d15fd3e73"
+                "reference": "f6f8a33f47b954a5178010bf11c756a1b85fabfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-stubs/woocommerce-stubs/zipball/2f5be3f363ff3d02b4e29404c7895d9d15fd3e73",
-                "reference": "2f5be3f363ff3d02b4e29404c7895d9d15fd3e73",
+                "url": "https://api.github.com/repos/php-stubs/woocommerce-stubs/zipball/f6f8a33f47b954a5178010bf11c756a1b85fabfe",
+                "reference": "f6f8a33f47b954a5178010bf11c756a1b85fabfe",
                 "shasum": ""
             },
             "require": {
@@ -418,6 +418,7 @@
                 "symfony/polyfill-php73": "Symfony polyfill backporting some PHP 7.3+ features to lower PHP versions",
                 "szepeviktor/phpstan-wordpress": "WordPress extensions for PHPStan"
             },
+            "default-branch": true,
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -433,9 +434,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-stubs/woocommerce-stubs/issues",
-                "source": "https://github.com/php-stubs/woocommerce-stubs/tree/v8.9.1"
+                "source": "https://github.com/php-stubs/woocommerce-stubs/tree/v9.4.1"
             },
-            "time": "2024-05-21T11:47:54+00:00"
+            "time": "2024-11-12T19:44:02+00:00"
         },
         {
             "name": "php-stubs/wordpress-stubs",
@@ -553,12 +554,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHPCSExtra.git",
-                "reference": "82c468b9d48dd814ff1ba795fe8d76bc631405b2"
+                "reference": "31ef149a1ee85ec0d355e58418d78d927e89d185"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSExtra/zipball/82c468b9d48dd814ff1ba795fe8d76bc631405b2",
-                "reference": "82c468b9d48dd814ff1ba795fe8d76bc631405b2",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSExtra/zipball/31ef149a1ee85ec0d355e58418d78d927e89d185",
+                "reference": "31ef149a1ee85ec0d355e58418d78d927e89d185",
                 "shasum": ""
             },
             "require": {
@@ -624,7 +625,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-10-23T04:01:15+00:00"
+            "time": "2024-11-11T18:03:33+00:00"
         },
         {
             "name": "phpcsstandards/phpcsutils",
@@ -632,12 +633,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHPCSUtils.git",
-                "reference": "45a89cce01aea72ba8946d045522ddd22324d9e3"
+                "reference": "2a5965d482a1425df3af42f0f3032a7ba79dc1d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSUtils/zipball/45a89cce01aea72ba8946d045522ddd22324d9e3",
-                "reference": "45a89cce01aea72ba8946d045522ddd22324d9e3",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSUtils/zipball/2a5965d482a1425df3af42f0f3032a7ba79dc1d4",
+                "reference": "2a5965d482a1425df3af42f0f3032a7ba79dc1d4",
                 "shasum": ""
             },
             "require": {
@@ -713,7 +714,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-10-31T15:04:32+00:00"
+            "time": "2024-11-13T09:33:12+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2107,12 +2108,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "c2b6235e5ba1c2665c520564c5f978f393a3b382"
+                "reference": "7f5d178f4ce5304fa211f322d6d1c8de5b39c75e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/c2b6235e5ba1c2665c520564c5f978f393a3b382",
-                "reference": "c2b6235e5ba1c2665c520564c5f978f393a3b382",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/7f5d178f4ce5304fa211f322d6d1c8de5b39c75e",
+                "reference": "7f5d178f4ce5304fa211f322d6d1c8de5b39c75e",
                 "shasum": ""
             },
             "require": {
@@ -2180,7 +2181,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-11-02T09:58:19+00:00"
+            "time": "2024-11-12T15:20:23+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -2234,16 +2235,16 @@
         },
         {
             "name": "wp-coding-standards/wpcs",
-            "version": "3.1.0",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
-                "reference": "9333efcbff231f10dfd9c56bb7b65818b4733ca7"
+                "reference": "ffec7bfced474ed83c4e1b66225d37f84fdb65a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/9333efcbff231f10dfd9c56bb7b65818b4733ca7",
-                "reference": "9333efcbff231f10dfd9c56bb7b65818b4733ca7",
+                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/ffec7bfced474ed83c4e1b66225d37f84fdb65a3",
+                "reference": "ffec7bfced474ed83c4e1b66225d37f84fdb65a3",
                 "shasum": ""
             },
             "require": {
@@ -2267,6 +2268,7 @@
                 "ext-iconv": "For improved results",
                 "ext-mbstring": "For improved results"
             },
+            "default-branch": true,
             "type": "phpcodesniffer-standard",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2296,7 +2298,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2024-03-25T16:39:00+00:00"
+            "time": "2024-11-08T12:53:42+00:00"
         },
         {
             "name": "wpify/php-scoper",
@@ -2401,11 +2403,11 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
+    "platform": {},
+    "platform-dev": {},
     "platform-overrides": {
         "php": "7.4"
     },

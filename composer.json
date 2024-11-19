@@ -5,15 +5,16 @@
     "type": "wordpress-plugin",
     "license": "GPL-3.0-or-later",
     "require-dev": {
-        "php-stubs/woocommerce-stubs": "^8.1",
-        "wp-coding-standards/wpcs": "^3.0",
+        "php-stubs/woocommerce-stubs": "*",
+        "wp-coding-standards/wpcs": "*",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpunit/phpunit": "^9.6",
         "wpify/scoper": "3.1.3"
     },
     "autoload": {
         "psr-4": {
-            "Krokedil\\Ledyer\\Payments\\": "src/"
+            "Krokedil\\Ledyer\\Payments\\": "src/",
+			"Krokedil\\Ledyer\\Payments\\Blocks\\": "src/blocks/src/"
         }
     },
     "config": {

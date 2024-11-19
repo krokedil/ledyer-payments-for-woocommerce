@@ -79,6 +79,8 @@ class Assets {
 		$dependencies = array( 'jquery' );
 		wp_register_script( self::CHECKOUT_HANDLE, $src, $dependencies, LEDYER_PAYMENTS_VERSION, false );
 
+		error_log( 'REFERENCE: ' . $reference );
+
 		$pay_for_order = is_wc_endpoint_url( 'order-pay' );
 		wp_localize_script(
 			self::CHECKOUT_HANDLE,
