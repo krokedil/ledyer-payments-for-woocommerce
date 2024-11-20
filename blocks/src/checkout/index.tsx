@@ -13,42 +13,31 @@ import { registerPaymentMethod } from "@woocommerce/blocks-registry";
 import { getSetting } from "@woocommerce/settings";
 
 const settings: any = getSetting("ledyer_payments_data", {});
-const title: string = decodeEntities(
-  settings.title || "Ledyer Payments"
-);
+const title: string = settings.title || "Ledyer Payments";
+const isEnabled: boolean = settings.enabled || false;
+const description: string = settings.description || "";
+const iconUrl = settings.iconurl || false;
 
-type LedyerCheckoutProps = {
-  cartData?: any;
+const Content: React.FC = () => {
+  return <div>{description}</div>;
 };
-
-const LedyerCheckout: React.FC<LedyerCheckoutProps> = (props) => {
-  const { cartData } = props;
-  const { author, quote } = cartData.extensions.example || {};
-
+const Label: React.FC = () => {
+  const icon = iconUrl ? <img src={iconUrl} alt={title} /> : null;
   return (
-    <div>
-      <p style={{ fontStyle: "italic" }}>
-        "{quote}"
-        <br />
-        <span style={{ fontWeight: "bold", marginLeft: "20px" }}>
-          - {author}
-        </span>
-      </p>
-    </div>
+    <span className="lp-block-label">
+      {icon}
+      {title}
+    </span>
   );
 };
 
-const Label: React.FC = () => {
-  return <span>{title}</span>;
-};
-
 const options = {
-  name: "Ledyer Checkout",
+  name: "ledyer_payments",
   label: <Label />,
-  content: <LedyerCheckout />,
-  edit: <LedyerCheckout />,
+  content: <Content />,
+  edit: <Content />,
   placeOrderButtonLabel: "Pay with Ledyer",
-  canMakePayment: () => settings.enabled,
+  canMakePayment: () => true,
   ariaLabel: title,
 };
 

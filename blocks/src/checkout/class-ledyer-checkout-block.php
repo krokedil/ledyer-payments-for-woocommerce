@@ -42,6 +42,11 @@ class Ledyer_Checkout_Block extends AbstractPaymentMethodType {
 	 * @return array
 	 */
 	public function get_payment_method_data() {
-		return $this->settings;
+		return array(
+			'title'       => __( 'Ledyer Payments title', 'ledyer-payments', 'ledyer-payments-for-woocommerce' ),
+			'description' => __( 'Ledyer Payments description', 'ledyer-payments-for-woocommerce' ),
+			'iconurl'     => LEDYER_PAYMENTS_PLUGIN_URL . '/src/assets/img/ledyer-darkgray.svg',
+			'enabled'     => true,
+		);
 	}
 }
