@@ -51,8 +51,8 @@ add_action(
 			// Declare HPOS compatibility.
 			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
 
-			// Declare Checkout Blocks incompatibility.
-			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, false );
+			// Declare Checkout Blocks compatibility.
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, true );
 		}
 	}
 );
@@ -127,18 +127,10 @@ function Ledyer_Payments() {  // phpcs:ignore -- allow non-snake case function n
 function register_payment_block() {
 	if ( class_exists( 'Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType' ) ) {
 		require_once LEDYER_PAYMENTS_PLUGIN_PATH . '/blocks/src/checkout/class-ledyer-checkout-block.php';
-
-		$settings                    = get_option( 'woocommerce_ledyer_payments_settings', array() );
-		$main_payment_method_enabled = $settings['enabled'] ?? 'no';
-
-		$payment_methods = array(
-			'ledyer_payments' => 'yes' === $main_payment_method_enabled,
-		);
-
 		add_action(
 			'woocommerce_blocks_payment_method_type_registration',
-			function ( $payment_method_registry ) use ( $payment_methods ) {
-				$payment_method_registry->register( new Ledyer_Checkout_Block( $payment_methods ) );
+			function ( $payment_method_registry ) {
+				$payment_method_registry->register( new Ledyer_Checkout_Block() );
 			}
 		);
 	}

@@ -399,12 +399,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-stubs/woocommerce-stubs.git",
-                "reference": "f6f8a33f47b954a5178010bf11c756a1b85fabfe"
+                "reference": "d4347943eac3af274089abf1af9449e9dab45a96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-stubs/woocommerce-stubs/zipball/f6f8a33f47b954a5178010bf11c756a1b85fabfe",
-                "reference": "f6f8a33f47b954a5178010bf11c756a1b85fabfe",
+                "url": "https://api.github.com/repos/php-stubs/woocommerce-stubs/zipball/d4347943eac3af274089abf1af9449e9dab45a96",
+                "reference": "d4347943eac3af274089abf1af9449e9dab45a96",
                 "shasum": ""
             },
             "require": {
@@ -434,9 +434,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-stubs/woocommerce-stubs/issues",
-                "source": "https://github.com/php-stubs/woocommerce-stubs/tree/v9.4.1"
+                "source": "https://github.com/php-stubs/woocommerce-stubs/tree/v9.4.2"
             },
-            "time": "2024-11-12T19:44:02+00:00"
+            "time": "2024-11-19T19:49:15+00:00"
         },
         {
             "name": "php-stubs/wordpress-stubs",
@@ -633,12 +633,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHPCSUtils.git",
-                "reference": "2a5965d482a1425df3af42f0f3032a7ba79dc1d4"
+                "reference": "9b2671b7342d2c8ad8ec78c8bdac45958d9de065"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSUtils/zipball/2a5965d482a1425df3af42f0f3032a7ba79dc1d4",
-                "reference": "2a5965d482a1425df3af42f0f3032a7ba79dc1d4",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSUtils/zipball/9b2671b7342d2c8ad8ec78c8bdac45958d9de065",
+                "reference": "9b2671b7342d2c8ad8ec78c8bdac45958d9de065",
                 "shasum": ""
             },
             "require": {
@@ -714,7 +714,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-11-13T09:33:12+00:00"
+            "time": "2024-11-17T04:37:55+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1041,12 +1041,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "7e5a1cc50d52a8019af1d0bf90f0980f16ea9f8a"
+                "reference": "aa6e85808145e6357a07fcad937e736cf4022e75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7e5a1cc50d52a8019af1d0bf90f0980f16ea9f8a",
-                "reference": "7e5a1cc50d52a8019af1d0bf90f0980f16ea9f8a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/aa6e85808145e6357a07fcad937e736cf4022e75",
+                "reference": "aa6e85808145e6357a07fcad937e736cf4022e75",
                 "shasum": ""
             },
             "require": {
@@ -1057,7 +1057,7 @@
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "myclabs/deep-copy": "^1.12.0",
+                "myclabs/deep-copy": "^1.12.1",
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=7.3",
@@ -1136,7 +1136,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-31T05:51:17+00:00"
+            "time": "2024-11-21T14:43:04+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -2108,12 +2108,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "7f5d178f4ce5304fa211f322d6d1c8de5b39c75e"
+                "reference": "866f7cf551e49a410581cd50e4e1c44e2e4db2f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/7f5d178f4ce5304fa211f322d6d1c8de5b39c75e",
-                "reference": "7f5d178f4ce5304fa211f322d6d1c8de5b39c75e",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/866f7cf551e49a410581cd50e4e1c44e2e4db2f0",
+                "reference": "866f7cf551e49a410581cd50e4e1c44e2e4db2f0",
                 "shasum": ""
             },
             "require": {
@@ -2181,7 +2181,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-11-12T15:20:23+00:00"
+            "time": "2024-11-21T05:15:17+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -2239,12 +2239,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
-                "reference": "ffec7bfced474ed83c4e1b66225d37f84fdb65a3"
+                "reference": "325a4d67a4fdb4d08a7691f9314e69325b874614"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/ffec7bfced474ed83c4e1b66225d37f84fdb65a3",
-                "reference": "ffec7bfced474ed83c4e1b66225d37f84fdb65a3",
+                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/325a4d67a4fdb4d08a7691f9314e69325b874614",
+                "reference": "325a4d67a4fdb4d08a7691f9314e69325b874614",
                 "shasum": ""
             },
             "require": {
@@ -2298,7 +2298,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2024-11-08T12:53:42+00:00"
+            "time": "2024-11-22T07:13:52+00:00"
         },
         {
             "name": "wpify/php-scoper",
@@ -2403,11 +2403,11 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {},
-    "platform-dev": {},
+    "platform": [],
+    "platform-dev": [],
     "platform-overrides": {
         "php": "7.4"
     },
