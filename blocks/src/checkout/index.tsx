@@ -33,12 +33,16 @@ const description: string = settings.description || "";
 const iconUrl = settings.iconurl || false;
 const ledyerPaymentsParams = settings.ledyerpaymentsparams || {};
 
-const PaymentMethodComponent: React.FC<{ eventRegistration: any; companyNumberRef: React.RefObject<HTMLInputElement>; setNotice: (message: string) => void }> = ({ eventRegistration, companyNumberRef, setNotice }) => {
-  const { onCheckoutSuccess } = eventRegistration;
+const PaymentMethodComponent: React.FC<{ organizationNumber: React.RefObject<HTMLInputElement>; props: any }> = ({ organizationNumber, props }) => {
+  const { onCheckoutSuccess } = props.eventRegistration;
+  const { emitResponse } = props;
+  const { billingData } = props.billing;
+  const {shippingAddress } = props.shippingData;
 
   useEffect(() => {
-    const unsubscribe = onCheckoutSuccess(async (data: any) => {
-      await submitOrder(companyNumberRef, data.orderId, data.customerId, setNotice);
+    const unsubscribe = onCheckoutSuccess(async (orderData: any) => {
+      const { orderId } = orderData;
+      return await submitOrder(orderId, organizationNumber, billingData, shippingAddress, emitResponse);
     });
     return unsubscribe;
   }, [onCheckoutSuccess]);
@@ -47,19 +51,18 @@ const PaymentMethodComponent: React.FC<{ eventRegistration: any; companyNumberRe
 };
 
 const submitOrder = async (
-  companyNumberRef: React.RefObject<HTMLInputElement>,
-  orderId: string,
-  customerData: any,
-  setNotice: (message: string) => void
+  orderId: any,
+  organizationNumber: React.RefObject<HTMLInputElement>,
+  billingData: any,
+  shippingData: any,
+  emitResponse: any
   ) => {
-  const organizationNumber = companyNumberRef.current?.value.trim();
-  if (!organizationNumber || !organizationNumber.length) {
-    setNotice("Company number is missing");
-    throw new Error("Missing company number.");
+  const organizationNumberVal = organizationNumber.current?.value.trim();
+  if (!organizationNumberVal || !organizationNumberVal.length) {
+    return { type: emitResponse.responseTypes.ERROR, message: "Company number is missing.", messageContext: emitResponse.noticeContexts.CHECKOUT };
   }
-
   const { sessionId } = ledyerPaymentsParams;
-  const authArgs = { customer: { ...customerData }, sessionId };
+  const authArgs = extractCustomerData(billingData, shippingData, organizationNumberVal, sessionId);
   const authResponse = await window.ledyer.payments.api.authorize(authArgs);
 
   if (authResponse) {
@@ -83,9 +86,9 @@ const submitOrder = async (
           data: { location },
         } = data;
         window.location = location;
+        return { type: emitResponse.responseTypes.SUCCESS };
       } catch (error) {
-        setNotice("The payment was successful, but the order could not be created.");
-        throw new Error("The payment was successful, but the order could not be created.");
+        return { type: emitResponse.responseTypes.ERROR, message: "The payment was successful, but the order could not be created.", messageContext: emitResponse.noticeContexts.CHECKOUT };
       }
     } else if ("awaitingSignatory" === authResponse.state) {
       const { pendingPaymentUrl, pendingPaymentNonce } = ledyerPaymentsParams;
@@ -103,12 +106,51 @@ const submitOrder = async (
           data: { location },
         } = data;
         window.location = location;
+        return { type: emitResponse.responseTypes.SUCCESS };
       } catch (error) {
-        setNotice("The payment is pending payment. Failed to redirect to order received page.");
-        throw new Error("The payment is pending payment. Failed to redirect to order received page.");
+        return { type: emitResponse.responseTypes.ERROR, message: "The payment is pending payment. Failed to redirect to order received page.", messageContext: emitResponse.noticeContexts.CHECKOUT };
       }
     }
+    return { type: emitResponse.responseTypes.ERROR, message: "The payment was not successful. Not authorized.", messageContext: emitResponse.noticeContexts.CHECKOUT };
   }
+  return { type: emitResponse.responseTypes.ERROR, message: "The payment was not successful. Not authorization response received.", messageContext: emitResponse.noticeContexts.CHECKOUT };
+};
+
+const extractCustomerData = (billingData: any, shippingData: any, organizationNumber: any, sessionId: any) => {
+  return {
+      customer: {
+          companyId: organizationNumber || null,
+          email: billingData?.email || null,
+          firstName: billingData?.first_name || null,
+          lastName: billingData?.last_name || null,
+          phone: billingData?.phone || null,
+          reference1: "",
+          reference2: "",
+          billingAddress: {
+              attentionName: billingData?.first_name || null,
+              city: billingData?.city || null,
+              companyName: billingData?.company || null,
+              country: billingData?.country || null,
+              postalCode: billingData?.postcode || null,
+              streetAddress: billingData?.address_1 || null
+          },
+          shippingAddress: {
+              attentionName: shippingData?.first_name || null,
+              city: shippingData?.city || null,
+              companyName: shippingData?.company || null,
+              country: shippingData?.country || null,
+              postalCode: shippingData?.postcode || null,
+              streetAddress: shippingData?.address_1 || null,
+              contact: {
+                  email: billingData?.email || null,
+                  firstName: shippingData?.first_name || null,
+                  lastName: shippingData?.last_name || null,
+                  phone: shippingData?.phone || null
+              }
+          }
+      },
+      sessionId: sessionId || null
+  };
 };
 
 const Notice: React.FC<{ message: string }> = ({ message }) => {
@@ -129,15 +171,13 @@ const Notice: React.FC<{ message: string }> = ({ message }) => {
   );
 };
 
-const Content: React.FC<any> = ({ eventRegistration }) => {
-  const [notice, setNotice] = useState<string | null>(null);
-  const companyNumberRef = useRef<HTMLInputElement>(null);
+const Content: React.FC<any> = (props) => {
+  const organizationNumber = useRef<HTMLInputElement>(null);
 
   return (
     <div>
-      {notice && <Notice message={notice} />}
       <p>{decodeEntities(description)}</p>
-      <PaymentMethodComponent eventRegistration={eventRegistration} companyNumberRef={companyNumberRef} setNotice={setNotice} />
+      <PaymentMethodComponent props={props} organizationNumber={organizationNumber} />
       <input
         type="text"
         className="input-text"
@@ -145,13 +185,12 @@ const Content: React.FC<any> = ({ eventRegistration }) => {
         id="billing_company_number_block"
         placeholder="Company number"
         defaultValue=""
-        ref={companyNumberRef}
+        ref={organizationNumber}
         required
       />
     </div>
   );
 };
-
 
 const Label: React.FC = () => {
   const icon = iconUrl ? <img src={iconUrl} alt={title} /> : null;
