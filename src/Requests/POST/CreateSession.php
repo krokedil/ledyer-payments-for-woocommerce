@@ -1,13 +1,13 @@
 <?php
 namespace Krokedil\Ledyer\Payments\Requests\POST;
 
-use Krokedil\Ledyer\Payments\Requests\POST;
+use Krokedil\Ledyer\Payments\Requests\POSTRequest;
 use Krokedil\Ledyer\Payments\Requests\Helpers\Cart;
 
 /**
  * Create checkout session request class.
  */
-class CreateSession extends POST {
+class CreateSession extends POSTRequest {
 
 	/**
 	 * CreateSession constructor.
@@ -29,7 +29,7 @@ class CreateSession extends POST {
 		return array(
 			'country'                 => WC()->customer->get_billing_country(),
 			'currency'                => get_woocommerce_currency(),
-			'locale'                  => str_replace( '_', '-', get_locale() ),
+			'locale'                  => $cart->get_locale(),
 			'orderLines'              => $cart->get_order_lines(),
 			'reference'               => Ledyer_Payments()->session()->get_reference(),
 			'settings'                => array(

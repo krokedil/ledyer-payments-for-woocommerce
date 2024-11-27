@@ -1,14 +1,14 @@
 <?php
 namespace Krokedil\Ledyer\Payments\Requests\GET;
 
-use Krokedil\Ledyer\Payments\Requests\GET;
+use Krokedil\Ledyer\Payments\Requests\GETRequest;
 
 /**
  * Create order request class.
  *
  * Authorizes a checkout payment. This happens when the customer has completed the payment while still on the checkout page.
  */
-class GetSession extends GET {
+class GetSession extends GETRequest {
 
 	/**
 	 * CreateSession constructor.

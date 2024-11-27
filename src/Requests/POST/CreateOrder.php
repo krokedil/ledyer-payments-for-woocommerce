@@ -1,7 +1,7 @@
 <?php
 namespace Krokedil\Ledyer\Payments\Requests\POST;
 
-use Krokedil\Ledyer\Payments\Requests\POST;
+use Krokedil\Ledyer\Payments\Requests\POSTRequest;
 use Krokedil\Ledyer\Payments\Requests\Helpers\Order;
 
 /**
@@ -9,7 +9,7 @@ use Krokedil\Ledyer\Payments\Requests\Helpers\Order;
  *
  * Acknowledges an order.
  */
-class CreateOrder extends POST {
+class CreateOrder extends POSTRequest {
 
 	/**
 	 * CreateSession constructor.
@@ -37,7 +37,7 @@ class CreateOrder extends POST {
 			'country'                 => WC()->customer->get_billing_country(),
 			'currency'                => $order->get_currency(),
 			'customer'                => $order->get_customer(),
-			'locale'                  => str_replace( '_', '-', get_locale() ),
+			'locale'                  => $order->get_locale(),
 			'orderLines'              => $order->get_order_lines(),
 			'reference'               => $order->get_reference(),
 			'storeId'                 => Ledyer_Payments()->settings( 'store_id' ),

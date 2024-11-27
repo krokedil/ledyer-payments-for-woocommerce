@@ -633,12 +633,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHPCSUtils.git",
-                "reference": "9b2671b7342d2c8ad8ec78c8bdac45958d9de065"
+                "reference": "2a5965d482a1425df3af42f0f3032a7ba79dc1d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSUtils/zipball/9b2671b7342d2c8ad8ec78c8bdac45958d9de065",
-                "reference": "9b2671b7342d2c8ad8ec78c8bdac45958d9de065",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSUtils/zipball/2a5965d482a1425df3af42f0f3032a7ba79dc1d4",
+                "reference": "2a5965d482a1425df3af42f0f3032a7ba79dc1d4",
                 "shasum": ""
             },
             "require": {
@@ -714,7 +714,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-11-17T04:37:55+00:00"
+            "time": "2024-11-13T09:33:12+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2108,12 +2108,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-                "reference": "866f7cf551e49a410581cd50e4e1c44e2e4db2f0"
+                "reference": "56784f116c2d95446e88c433f681f880966e039a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/866f7cf551e49a410581cd50e4e1c44e2e4db2f0",
-                "reference": "866f7cf551e49a410581cd50e4e1c44e2e4db2f0",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/56784f116c2d95446e88c433f681f880966e039a",
+                "reference": "56784f116c2d95446e88c433f681f880966e039a",
                 "shasum": ""
             },
             "require": {
@@ -2181,7 +2181,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2024-11-21T05:15:17+00:00"
+            "time": "2024-11-15T00:51:01+00:00"
         },
         {
             "name": "theseer/tokenizer",
