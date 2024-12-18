@@ -7,29 +7,35 @@ jQuery( function ( $ ) {
         params: LedyerPaymentsParams,
         gatewayId: LedyerPaymentsParams.gatewayId,
         sessionId: LedyerPaymentsParams.sessionId,
-
-
+        i18n: {},
 
         init: () => {
             $( "body" ).on( "click", "input#place_order, button#place_order", ( e ) => {
-                if ( ! LedyerPayments.isActiveGateway() ) {
-                    return
-                }
+                // Do not allow a purchase to go through if ANY error occurs.
+                try {
+                    if ( ! LedyerPayments.isActiveGateway() ) {
+                        return
+                    }
 
-                const organizationNumber = $( "#billing_company_number" ).val().trim()
-                if ( organizationNumber.length === 0 ) {
-                    LedyerPayments.printNotice( LedyerPayments.params.i18n.companyNumberMissing )
+                    const organizationNumber = $( "#billing_company_number" ).val().trim()
+                    if ( organizationNumber.length === 0 ) {
+                        LedyerPayments.printNotice( LedyerPayments.params.i18n.companyNumberMissing )
+                        return false
+                    }
+
+                    LedyerPayments.submitOrder( e )
+                } catch ( error ) {
+                    LedyerPayments.printNotice( LedyerPayments.params.i18n.genericError )
+                    console.error( error )
                     return false
                 }
-
-                LedyerPayments.submitOrder( e )
             } )
 
             $( document ).ready( () => {
                 // If "billing_form", remove the field from the payment_form and insert it after the company name field. Otherwise, if it is "payment_form", leave as-is.
                 if ( LedyerPayments.params.companyNumberPlacement === "billing_form" ) {
                     if ( LedyerPayments.isActiveGateway() ) {
-                        $( "#billing_company_number_field" ).detach().insertAfter( "#billing_company_field" )
+                        $( "#billing_company_number_field" ).remove()
                     }
 
                     // Required whenever the customer changes payment method.
@@ -37,6 +43,11 @@ jQuery( function ( $ ) {
                     // Required when the checkout is initially loaded, and Ledyer is the chosen gateway.
                     $( "body" ).on( "updated_checkout", LedyerPayments.moveCompanyNumberField )
                 }
+
+                // Make the company name field required if Ledyer is the chosen gateway.
+                LedyerPayments.toggleCheckoutField()
+                $( "body" ).on( "change", 'input[name="payment_method"]', LedyerPayments.toggleCheckoutField )
+                $( "body" ).on( "updated_checkout", LedyerPayments.toggleCheckoutField )
             } )
         },
 
@@ -45,15 +56,117 @@ jQuery( function ( $ ) {
          * @returns {void}
          */
         moveCompanyNumberField: () => {
-            let field = $( "#billing_company_number_field" ).detach()
             if ( LedyerPayments.params.companyNumberPlacement === "billing_form" ) {
                 if ( LedyerPayments.isActiveGateway() ) {
-                    $( "#billing_company_number_field" ).detach()
-                    field.insertAfter( "#billing_company_field" )
+                    $( "#billing_company_number_field" ).detach().insertAfter( "#billing_company_field" ).show()
                 } else {
-                    field = $( "#billing_company_number_field" ).detach()
+                    $( "#billing_company_number_field" ).hide()
                 }
             }
+        },
+
+        /**
+         * Toggles the company name field between required and optional.
+         * @returns {void}
+         */
+        toggleCheckoutField: () => {
+            if ( LedyerPayments.isActiveGateway() ) {
+                LedyerPayments.makeCheckoutFieldRequired( "billing_company_field" )
+            } else {
+                LedyerPayments.makeCheckoutFieldOptional( "billing_company_field", false )
+            }
+        },
+
+        /**
+         * Makes a checkout field required.
+         * @param {string} id - The ID of the field.
+         * @returns {void}
+         */
+        makeCheckoutFieldRequired: ( id ) => {
+            const i18n = LedyerPayments.i18n.required ?? $( ".required" ).first().text()
+            if ( i18n.length === 0 ) {
+                // None of the fields are optional, there is nothing to do.
+                return false
+            } else {
+                // Save the i18n for later use.
+                LedyerPayments.i18n.required = i18n
+            }
+
+            const field = $( `#${ id }` )
+
+            const input = field.find( "input" ).first()
+            if ( input.attr( "aria-required" ) === "true" || input.attr( "required" ) === "true" ) {
+                // The field is already required.
+                return false
+            }
+
+            // Set a flag to determine whether the field was optional before.
+            field.attr( "data-optional", "true" )
+
+            // Make the input field required.
+            input.attr( "aria-required", "true" )
+            input.attr( "required", "true" )
+
+            // Remove the optional label.
+            const label = field.find( "label" ).first()
+            label.find( ".optional" ).remove()
+
+            // Add the required label.
+            let clone = $( ".required" ).first()
+            if ( clone.length === 0 ) {
+                // No required field exists. Let us make some assumption and create one.
+                clone = $.parseHTML( `<abbr class="required" title="required">${ i18n }</abbr>` )
+            } else {
+                clone = clone.clone()
+            }
+            label.append( clone )
+        },
+
+        /**
+         * Makes a checkout field optional.
+         * @param {string} id - The ID of the field.
+         * @param {boolean} restore - Whether to restore the field to optional.
+         * @returns {void}
+         */
+        makeCheckoutFieldOptional: ( id, restore = true ) => {
+            const i18n = LedyerPayments.i18n.optional ?? $( ".optional" ).first().text()
+            if ( i18n.length === 0 ) {
+                // None of the fields are required, there is nothing to do.
+                return false
+            } else {
+                // Save the i18n for later use.
+                LedyerPayments.i18n.optional = i18n
+            }
+
+            const field = $( `#${ id }` )
+            if ( ! field.attr( "data-optional" ) && ! restore ) {
+                // If restore is false, we won't restore the field to optional.
+                return false
+            }
+
+            if ( field.find( ".required" ).length === 0 ) {
+                // The field is already optional.
+                return false
+            }
+
+            // Make the input field optional.
+            const input = field.find( "input" ).first()
+            input.attr( "aria-required", "false" )
+            input.attr( "required", "false" )
+
+            // Remove the required label.
+            const label = field.find( "label" ).first()
+            label.find( ".required" ).remove()
+
+            // Add the optional label.
+            let el = $( ".optional" ).first()
+            if ( el.length === 0 ) {
+                // No optional field exists. Let us make some assumption and create one.
+                el = $.parseHTML( `<span class="optional">${ i18n }</span>` )
+            } else {
+                el = el.clone()
+            }
+            label.append( el )
         },
 
         /**
@@ -297,7 +410,17 @@ jQuery( function ( $ ) {
                     auth_token: authToken,
                     nonce: createOrderNonce,
                 },
+                async: false,
                 success: ( data ) => {
+                    if ( ! data.success ) {
+                        LedyerPayments.submitOrderFail(
+                            "createOrder",
+                            "The payment was successful, but the order could not be created.",
+                        )
+
+                        return
+                    }
+
                     const {
                         data: { location },
                     } = data
@@ -307,7 +430,11 @@ jQuery( function ( $ ) {
                     console.debug( "Error:", textStatus, errorThrown )
                     console.debug( "Response:", jqXHR.responseText )
 
-                    submitOrderFail( "createOrder", "The payment was successful, but the order could not be created." )
+                    console.error( errorThrown )
+                    LedyerPayments.submitOrderFail(
+                        "createOrder",
+                        "The payment was successful, but the order could not be created.",
+                    )
                 },
             } )
         },
@@ -339,7 +466,17 @@ jQuery( function ( $ ) {
                     order_key: orderId,
                     nonce: pendingPaymentNonce,
                 },
+                async: false,
                 success: ( data ) => {
+                    if ( ! data.success ) {
+                        LedyerPayments.submitOrderFail(
+                            "pendingPayment",
+                            "The payment is pending payment. Failed to redirect to order received page.",
+                        )
+
+                        return
+                    }
+
                     const {
                         data: { location },
                     } = data

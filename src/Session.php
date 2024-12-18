@@ -82,7 +82,7 @@ class Session {
 		}
 
 		// Resume existing session.
-		$this->resume_session();
+		$this->resume();
 
 		// Check if we got an order.
 		$order  = $this->get_order( $order );
@@ -156,6 +156,11 @@ class Session {
 	 * @return string
 	 */
 	public function get_reference() {
+		if ( empty( $this->session_reference ) ) {
+			$this->session_reference = wp_generate_uuid4();
+			$this->wc_update_session();
+		}
+
 		return $this->session_reference;
 	}
 
@@ -181,8 +186,13 @@ class Session {
 	 *
 	 * @return bool Whether there was a session to resume.
 	 */
-	private function resume_session() {
-		$session = isset( WC()->session ) ? json_decode( WC()->session->get( self::SESSION_KEY ), true ) : null;
+	public function resume() {
+		if ( ! empty( $this->gateway_session ) ) {
+			return true;
+		}
+
+		$session_data = isset( WC()->session ) ? WC()->session->get( self::SESSION_KEY ) : null;
+		$session      = ! empty( $session_data ) ? json_decode( $session_data, true ) : null;
 		if ( ! empty( $session ) ) {
 			$this->gateway_session    = $session['gateway_session'];
 			$this->session_hash       = $session['session_hash'];

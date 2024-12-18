@@ -83,10 +83,10 @@ class AJAX {
 		$result = Ledyer_Payments()->api()->create_order( $order_id, $auth_token );
 		if ( is_wp_error( $result ) ) {
 			Ledyer_Payments()->logger()->error( "[AJAX]: Create order failed: {$result->get_error_message()}", $context );
-			wp_send_json_error( $result->get_error_message() );
+			wp_send_json_error( $result );
 		}
 
-		$payment_id = $result['orderId'];
+		$payment_id = $result['orderId'] ?? null;
 		$order->update_meta_data( 'ledyer_payments_payment_id', $payment_id );
 		$order->save();
 
@@ -102,7 +102,7 @@ class AJAX {
 			'function'   => __FUNCTION__,
 			'order_id'   => $order_id,
 			'order_key'  => $order_key,
-			'payment_id' => $result['orderId'],
+			'payment_id' => $payment_id,
 		);
 		Ledyer_Payments()->logger()->debug( '[AJAX]: Successfully placed order with Ledyer, sending redirect URL to: ' . $redirect_to, $context );
 

@@ -58,6 +58,27 @@ class Gateway extends \WC_Payment_Gateway {
 	}
 
 	/**
+	 * Check if the gateway is the chosen payment method.
+	 *
+	 * Due to inconsistencies in the gateway name (e.g., ledyer_payments vs. ledyer_payments_invoice), we need to check for the presence of 'ledyer_payments'.
+	 *
+	 * @param int|null|\WC_Order $order_id The WooCommerce order or its id.
+	 * @return bool
+	 */
+	private function is_chosen_gateway( $order_id = null ) {
+		if ( $order_id instanceof \WC_Order ) {
+			$chosen_gateway = $order_id->get_payment_method();
+		} elseif ( ! empty( $order_id ) ) {
+			$order          = wc_get_order( $order_id );
+			$chosen_gateway = empty( $order ) ? '' : $order->get_payment_method();
+		} else {
+			$chosen_gateway = ! isset( WC()->session ) ? '' : WC()->session->get( 'chosen_payment_method' );
+		}
+
+		return strpos( $chosen_gateway, 'ledyer_payments' ) !== false;
+	}
+
+	/**
 	 * Initialize settings fields.
 	 *
 	 * @return void
@@ -89,6 +110,7 @@ class Gateway extends \WC_Payment_Gateway {
 				'placeholder'       => __( 'Company number', 'ledyer-payments-for-woocommerce' ),
 				'custom_attributes' => array(
 					'required' => 'true',
+					'pattern'  => '^[0-9]{6}-[0-9]{4}$',
 				),
 			)
 		);
@@ -134,14 +156,18 @@ class Gateway extends \WC_Payment_Gateway {
 	 * @return void
 	 */
 	public function process_checkout() {
-		$chosen_gateway = WC()->session->get( 'chosen_payment_method' );
-		if ( $this->id !== $chosen_gateway ) {
+		if ( ! $this->is_chosen_gateway() ) {
 			return;
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification
 		if ( isset( $_POST['billing_company_number'] ) && empty( $_POST['billing_company_number'] ) ) {
 			wc_add_notice( __( 'Please enter your company number.', 'ledyer-payments-for-woocommerce' ), 'error' );
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification
+		if ( isset( $_POST['billing_company'] ) && empty( $_POST['billing_company'] ) ) {
+			wc_add_notice( __( 'Please enter your company name.', 'ledyer-payments-for-woocommerce' ), 'error' );
 		}
 	}
 
@@ -154,7 +180,7 @@ class Gateway extends \WC_Payment_Gateway {
 	 */
 	public function process_custom_checkout_fields( $order_id ) {
 		$order = wc_get_order( $order_id );
-		if ( $order->get_payment_method() !== $this->id ) {
+		if ( ! $this->is_chosen_gateway( $order ) ) {
 			return;
 		}
 
@@ -257,6 +283,8 @@ class Gateway extends \WC_Payment_Gateway {
 		// The orderId is not available when the purchase is awaiting signatory.
 		$payment_id = wc_get_var( $ledyer_order['orderId'] );
 		if ( 'authorized' === $ledyer_order['state'] ) {
+			// orderId not available if state is awaitingSignatory.
+			$order->update_meta_data( '_wc_ledyer_order_id', $payment_id );
 			$order->payment_complete( $payment_id );
 		} elseif ( 'awaitingSignatory' === $ledyer_order['state'] ) {
 			$order->update_status( 'on-hold', __( 'Awaiting payment confirmation from Ledyer.', 'ledyer-payments-for-woocommerce' ) );
@@ -266,9 +294,6 @@ class Gateway extends \WC_Payment_Gateway {
 
 		$order->set_payment_method( $this->id );
 		$order->set_transaction_id( $payment_id );
-
-		// orderId not available if state is awaitingSignatory.
-		isset( $ledyer_order['orderId'] ) && $order->update_meta_data( '_wc_ledyer_order_id', $ledyer_order['orderId'] );
 
 		$env = wc_string_to_bool( Ledyer_Payments()->settings( 'test_mode' ) ?? 'no' ) ? 'sandbox' : 'production';
 		$order->update_meta_data( '_wc_ledyer_environment', $env );
@@ -343,6 +368,13 @@ class Gateway extends \WC_Payment_Gateway {
 		}
 
 		if ( ! empty( $order->get_date_paid() ) ) {
+			// Check for if the session wasn't clear properly. This can happen if the order is successfully created, but the customer was not redirected to the checkout page.
+			$session_id = Ledyer_Payments()->session()->get_id();
+			if ( $order->get_meta( '_wc_ledyer_session_id' ) === $session_id ) {
+				Ledyer_Payments()->logger()->debug( '[MAYBE_CONFIRM]: Order already paid, but session still remained. Session is now cleared.', $context );
+				Ledyer_Payments()->session()->clear_session( $order );
+			}
+
 			Ledyer_Payments()->logger()->debug( '[MAYBE_CONFIRM]: Order already paid. Customer probably refreshed thankyou page.', $context );
 			return;
 		}
