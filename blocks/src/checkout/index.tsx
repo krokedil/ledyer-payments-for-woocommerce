@@ -42,7 +42,8 @@ const PaymentMethodComponent: React.FC<{ organizationNumber: React.RefObject<HTM
   useEffect(() => {
     const unsubscribe = onCheckoutSuccess(async (orderData: any) => {
       const { orderId } = orderData;
-      return await submitOrder(orderId, organizationNumber, billingData, shippingAddress, emitResponse);
+      const orderKey = orderData.processingResponse.paymentDetails.order_key;
+      return await submitOrder(orderId, orderKey, organizationNumber, billingData, shippingAddress, emitResponse);
     });
     return unsubscribe;
   }, [onCheckoutSuccess]);
@@ -52,6 +53,7 @@ const PaymentMethodComponent: React.FC<{ organizationNumber: React.RefObject<HTM
 
 const submitOrder = async (
   orderId: any,
+  orderKey: any,
   organizationNumber: React.RefObject<HTMLInputElement>,
   billingData: any,
   shippingData: any,
@@ -62,7 +64,7 @@ const submitOrder = async (
     return { type: emitResponse.responseTypes.ERROR, message: "Company number is missing.", messageContext: emitResponse.noticeContexts.CHECKOUT };
   }
   const { sessionId } = ledyerPaymentsParams;
-  const authArgs = extractCustomerData(billingData, shippingData, organizationNumberVal, sessionId);
+  const authArgs = extractCustomerData(orderId, billingData, shippingData, organizationNumberVal, sessionId);
   const authResponse = await window.ledyer.payments.api.authorize(authArgs);
 
   if (authResponse) {
@@ -76,7 +78,8 @@ const submitOrder = async (
           method: "POST",
           body: new URLSearchParams({
             state,
-            order_key: orderId,
+            order_key: orderKey,
+            billing_company_number: organizationNumberVal,
             auth_token: authToken,
             nonce: createOrderNonce,
           }),
@@ -97,7 +100,7 @@ const submitOrder = async (
         const response = await fetch(pendingPaymentUrl, {
           method: "POST",
           body: new URLSearchParams({
-            order_key: orderId,
+            order_key: orderKey,
             nonce: pendingPaymentNonce,
           }),
         });
@@ -116,7 +119,7 @@ const submitOrder = async (
   return { type: emitResponse.responseTypes.ERROR, message: "The payment was not successful. Not authorization response received.", messageContext: emitResponse.noticeContexts.CHECKOUT };
 };
 
-const extractCustomerData = (billingData: any, shippingData: any, organizationNumber: any, sessionId: any) => {
+const extractCustomerData = (orderId: any, billingData: any, shippingData: any, organizationNumber: any, sessionId: any) => {
   return {
       customer: {
           companyId: organizationNumber || null,
@@ -124,7 +127,7 @@ const extractCustomerData = (billingData: any, shippingData: any, organizationNu
           firstName: billingData?.first_name || null,
           lastName: billingData?.last_name || null,
           phone: billingData?.phone || null,
-          reference1: "",
+          reference1: orderId.toString() || null,
           reference2: "",
           billingAddress: {
               attentionName: billingData?.first_name || null,

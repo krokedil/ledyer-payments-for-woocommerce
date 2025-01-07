@@ -199,21 +199,21 @@ class Gateway extends \WC_Payment_Gateway {
 	 * @return array An associative array containing the success status and redirect URl.
 	 */
 	public function process_payment( $order_id ) {
-		$helper   = new Order( wc_get_order( $order_id ) );
-		$customer = $helper->get_customer();
+		$helper             = new Order( wc_get_order( $order_id ) );
+		$is_blocks_checkout = defined( 'REST_REQUEST' ) && REST_REQUEST && ! empty( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], '/wc/store/' ) !== false;
+		$customer           = ! $is_blocks_checkout ? $helper->get_customer() : '';
+		// Update the nonce only if WordPress determines it necessary, such as when a guest becomes signed in.
+		$nonce = ! $is_blocks_checkout ? array(
+			'changePaymentMethodNonce' => wp_create_nonce( 'ledyer_payments_change_payment_method' ),
+			'logToFileNonce'           => wp_create_nonce( 'ledyer_payments_wc_log_js' ),
+			'createOrderNonce'         => wp_create_nonce( 'ledyer_payments_create_order' ),
+			'pendingPaymentNonce'      => wp_create_nonce( 'ledyer_payments_pending_payment' ),
+		) : '';
 
 		$order = $helper->order;
 		$order->update_meta_data( '_wc_ledyer_reference', Ledyer_Payments()->session()->get_reference() );
 		$order->update_meta_data( '_wc_ledyer_session_id', Ledyer_Payments()->session()->get_id() );
 		$order->save();
-
-		// Update the nonce only if WordPress determines it necessary, such as when a guest becomes signed in.
-		$nonce = array(
-			'changePaymentMethodNonce' => wp_create_nonce( 'ledyer_payments_change_payment_method' ),
-			'logToFileNonce'           => wp_create_nonce( 'ledyer_payments_wc_log_js' ),
-			'createOrderNonce'         => wp_create_nonce( 'ledyer_payments_create_order' ),
-			'pendingPaymentNonce'      => wp_create_nonce( 'ledyer_payments_pending_payment' ),
-		);
 
 		return array(
 			'order_key' => $order->get_order_key(),
