@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      PLUGIN_SLUG: ledyer-payments-for-woocommerce
+      PLUGIN_SLUG: qliro-one-for-woocommerce
 
     steps:
     - name: Checkout repository
@@ -30,19 +30,25 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-composer-
 
-    - name: Cache npm dependencies
+    - name: Cache pnpm dependencies
       uses: actions/cache@v4
       with:
-        path: ~/.npm
-        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+        path: ~/.pnpm-store
+        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-npm-
+          ${{ runner.os }}-pnpm-
+
+    - name: Install pnpm
+      run: |
+        curl -fsSL https://get.pnpm.io/install.sh | sh -
+        export PATH="$HOME/.local/share/pnpm:$PATH"
 
     - name: Install dependencies and build project
       run: |
         mkdir -p ~/.composer/cache
         composer install --prefer-dist --no-progress
-        npm ci && npm run build
+        pnpm install --frozen-lockfile
+        pnpm build
 
     - name: Get branch name and commit hash
       id: vars
