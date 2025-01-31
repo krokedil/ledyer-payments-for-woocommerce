@@ -48,7 +48,7 @@ jobs:
         mkdir -p ~/.composer/cache
         composer install --prefer-dist --no-progress
         pnpm install --frozen-lockfile
-        pnpm install -D webpack-cli
+        pnpm add -D webpack-cli
         pnpm build
 
     - name: Get branch name and commit hash
