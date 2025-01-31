@@ -30,26 +30,21 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-composer-
 
-    - name: Cache pnpm dependencies
+    - name: Cache npm dependencies
       uses: actions/cache@v4
       with:
-        path: ~/.pnpm-store
-        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-
-
-    - name: Setup pnpm
-      uses: pnpm/action-setup@v3
-      with:
-        version: latest
+          ${{ runner.os }}-npm-
 
     - name: Install dependencies and build project
       run: |
         mkdir -p ~/.composer/cache
         composer install --prefer-dist --no-progress
-        pnpm install --frozen-lockfile
-        pnpm add -D webpack-cli
-        pnpm build
+        npm ci
+        npm install -D webpack-cli
+        npm run build
 
     - name: Get branch name and commit hash
       id: vars
