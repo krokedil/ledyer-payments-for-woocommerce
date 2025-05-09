@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "188679acb1ff9557a23f5a78e2e9e407",
+    "content-hash": "c19493a15f849dd625f09f5d12429412",
     "packages": [],
     "packages-dev": [
         {
@@ -395,16 +395,16 @@
         },
         {
             "name": "php-stubs/woocommerce-stubs",
-            "version": "v8.9.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-stubs/woocommerce-stubs.git",
-                "reference": "2f5be3f363ff3d02b4e29404c7895d9d15fd3e73"
+                "reference": "d4347943eac3af274089abf1af9449e9dab45a96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-stubs/woocommerce-stubs/zipball/2f5be3f363ff3d02b4e29404c7895d9d15fd3e73",
-                "reference": "2f5be3f363ff3d02b4e29404c7895d9d15fd3e73",
+                "url": "https://api.github.com/repos/php-stubs/woocommerce-stubs/zipball/d4347943eac3af274089abf1af9449e9dab45a96",
+                "reference": "d4347943eac3af274089abf1af9449e9dab45a96",
                 "shasum": ""
             },
             "require": {
@@ -418,6 +418,7 @@
                 "symfony/polyfill-php73": "Symfony polyfill backporting some PHP 7.3+ features to lower PHP versions",
                 "szepeviktor/phpstan-wordpress": "WordPress extensions for PHPStan"
             },
+            "default-branch": true,
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -433,9 +434,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-stubs/woocommerce-stubs/issues",
-                "source": "https://github.com/php-stubs/woocommerce-stubs/tree/v8.9.1"
+                "source": "https://github.com/php-stubs/woocommerce-stubs/tree/v9.4.2"
             },
-            "time": "2024-05-21T11:47:54+00:00"
+            "time": "2024-11-19T19:49:15+00:00"
         },
         {
             "name": "php-stubs/wordpress-stubs",
@@ -1040,12 +1041,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "7e5a1cc50d52a8019af1d0bf90f0980f16ea9f8a"
+                "reference": "aa6e85808145e6357a07fcad937e736cf4022e75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7e5a1cc50d52a8019af1d0bf90f0980f16ea9f8a",
-                "reference": "7e5a1cc50d52a8019af1d0bf90f0980f16ea9f8a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/aa6e85808145e6357a07fcad937e736cf4022e75",
+                "reference": "aa6e85808145e6357a07fcad937e736cf4022e75",
                 "shasum": ""
             },
             "require": {
@@ -1056,7 +1057,7 @@
                 "ext-mbstring": "*",
                 "ext-xml": "*",
                 "ext-xmlwriter": "*",
-                "myclabs/deep-copy": "^1.12.0",
+                "myclabs/deep-copy": "^1.12.1",
                 "phar-io/manifest": "^2.0.4",
                 "phar-io/version": "^3.2.1",
                 "php": ">=7.3",
@@ -1135,7 +1136,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-10-31T05:51:17+00:00"
+            "time": "2024-11-21T14:43:04+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -2234,16 +2235,16 @@
         },
         {
             "name": "wp-coding-standards/wpcs",
-            "version": "3.1.0",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WordPress/WordPress-Coding-Standards.git",
-                "reference": "9333efcbff231f10dfd9c56bb7b65818b4733ca7"
+                "reference": "325a4d67a4fdb4d08a7691f9314e69325b874614"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/9333efcbff231f10dfd9c56bb7b65818b4733ca7",
-                "reference": "9333efcbff231f10dfd9c56bb7b65818b4733ca7",
+                "url": "https://api.github.com/repos/WordPress/WordPress-Coding-Standards/zipball/325a4d67a4fdb4d08a7691f9314e69325b874614",
+                "reference": "325a4d67a4fdb4d08a7691f9314e69325b874614",
                 "shasum": ""
             },
             "require": {
@@ -2267,6 +2268,7 @@
                 "ext-iconv": "For improved results",
                 "ext-mbstring": "For improved results"
             },
+            "default-branch": true,
             "type": "phpcodesniffer-standard",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -2296,7 +2298,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2024-03-25T16:39:00+00:00"
+            "time": "2024-11-22T07:13:52+00:00"
         },
         {
             "name": "wpify/php-scoper",
