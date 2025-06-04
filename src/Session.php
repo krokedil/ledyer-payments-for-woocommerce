@@ -77,7 +77,7 @@ class Session {
 			return;
 		}
 
-		if ( ( ! is_checkout() && ! is_checkout_pay_page() ) || is_order_received_page() ) {
+		if ( ( is_checkout() || is_wc_endpoint_url( 'order-pay' ) ) && ! is_wc_endpoint_url( 'order-received' ) ) {
 			return;
 		}
 
@@ -274,17 +274,19 @@ class Session {
 			$billing_address  = WC()->customer->get_billing();
 			$shipping_address = WC()->customer->get_shipping();
 			$shipping_method  = WC()->session->get( 'chosen_shipping_methods' );
+			$coupons          = WC()->cart->get_applied_coupons();
 
 			// Calculate a hash from the values.
-			$hash = md5( wp_json_encode( array( $total, $billing_address, $shipping_address, $shipping_method ) ) );
+			$hash = md5( wp_json_encode( array( $total, $billing_address, $shipping_address, $shipping_method, $coupons ) ) );
 		} else {
 			// Get values to use for the combined hash calculation.
 			$total            = $order->get_total( 'edit' );
 			$billing_address  = $order->get_address( 'billing' );
 			$shipping_address = $order->get_address( 'shipping' );
+			$coupons          = $order->get_coupon_codes();
 
 			// Calculate a hash from the values.
-			$hash = md5( wp_json_encode( array( $total, $billing_address, $shipping_address ) ) );
+			$hash = md5( wp_json_encode( array( $total, $billing_address, $shipping_address, $coupons ) ) );
 		}
 
 		return $hash;

@@ -28,6 +28,16 @@ class Assets {
 
 		// The client SDK requires that <script> tag ID is set to 'ledyer-payments'.
 		add_action( 'script_loader_tag', array( $this, 'script_loader_tag' ), 10, 2 );
+
+		/*
+		Todo: Fix this if needed.
+		if ( 'embedded' === $this->checkout_flow ) {
+			//For block-based themes, the template process is processed BEFORE the `wp_enqueue_script`. We need to enqueue the scripts in 'dibs_load_js' before the localized script is enqueued which depends on the former. The `init` hook cannot be used since `is_checkout` always returns false. With `template_redirect`, `is_checkout` returns the correct value, and is processed before the localization script is enqueued.
+			add_action( 'template_redirect', array( $this, 'dibs_load_js' ), 10 );
+			add_action( 'wc_dibs_before_checkout_form', array( $this, 'localize_and_enqueue_checkout_script' ) );
+
+			add_action( 'wp_enqueue_scripts', array( $this, 'dibs_load_css' ), 10 );
+		} */
 	}
 
 	/**
@@ -93,6 +103,8 @@ class Assets {
 		$src          = plugins_url( 'src/assets/js/ledyer-payments.js', LEDYER_PAYMENTS_MAIN_FILE );
 		$dependencies = array( 'jquery' );
 		wp_register_script( self::CHECKOUT_HANDLE, $src, $dependencies, LEDYER_PAYMENTS_VERSION, false );
+
+		error_log( 'REFERENCE: ' . $reference );
 
 		$pay_for_order = is_wc_endpoint_url( 'order-pay' );
 		wp_localize_script(

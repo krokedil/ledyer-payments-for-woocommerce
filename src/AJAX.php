@@ -91,6 +91,12 @@ class AJAX {
 			wp_send_json_error( 'Order not found' );
 		}
 
+		$company_number = filter_input( INPUT_POST, 'billing_company_number', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		if ( ! empty( $company_number ) ) {
+			$order->update_meta_data( '_billing_company_number', sanitize_text_field( $company_number ) );
+			$order->save();
+		}
+
 		$result = Ledyer_Payments()->api()->create_order( $order_id, $auth_token );
 		if ( is_wp_error( $result ) ) {
 			Ledyer_Payments()->logger()->error( "[AJAX]: Create order failed: {$result->get_error_message()}", $context );
