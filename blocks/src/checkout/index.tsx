@@ -33,7 +33,7 @@ const description: string = settings.description || "";
 const iconUrl = settings.iconurl || false;
 const ledyerPaymentsParams = settings.ledyerpaymentsparams || {};
 
-const PaymentMethodComponent: React.FC<{ organizationNumber: React.RefObject<HTMLInputElement>; props: any }> = ({ organizationNumber, props }) => {
+const PaymentMethodComponent: React.FC<{ organizationNumber: React.RefObject<HTMLInputElement>; reference1: React.RefObject<HTMLInputElement>; reference2: React.RefObject<HTMLInputElement>; props: any }> = ({ organizationNumber, reference1, reference2, props }) => {
   const { onCheckoutSuccess } = props.eventRegistration;
   const { emitResponse } = props;
   const { billingData } = props.billing;
@@ -43,7 +43,7 @@ const PaymentMethodComponent: React.FC<{ organizationNumber: React.RefObject<HTM
     const unsubscribe = onCheckoutSuccess(async (orderData: any) => {
       const { orderId } = orderData;
       const orderKey = orderData.processingResponse.paymentDetails.order_key;
-      return await submitOrder(orderId, orderKey, organizationNumber, billingData, shippingAddress, emitResponse);
+      return await submitOrder(orderId, orderKey, organizationNumber, reference1, reference2, billingData, shippingAddress, emitResponse);
     });
     return unsubscribe;
   }, [onCheckoutSuccess]);
@@ -55,16 +55,21 @@ const submitOrder = async (
   orderId: any,
   orderKey: any,
   organizationNumber: React.RefObject<HTMLInputElement>,
+  reference1: React.RefObject<HTMLInputElement>,
+  reference2: React.RefObject<HTMLInputElement>,
   billingData: any,
   shippingData: any,
   emitResponse: any
   ) => {
   const organizationNumberVal = organizationNumber.current?.value.trim();
+  const reference1Val = reference1.current?.value?.trim() || "";
+  const reference2Val = reference2.current?.value?.trim() || "";
+
   if (!organizationNumberVal || !organizationNumberVal.length) {
     return { type: emitResponse.responseTypes.ERROR, message: "Company number is missing.", messageContext: emitResponse.noticeContexts.CHECKOUT };
   }
   const { sessionId } = ledyerPaymentsParams;
-  const authArgs = extractCustomerData(orderId, billingData, shippingData, organizationNumberVal, sessionId);
+  const authArgs = extractCustomerData(orderId, billingData, shippingData, organizationNumberVal, reference1Val, reference2Val, sessionId);
   const authResponse = await window.ledyer.payments.api.authorize(authArgs);
 
   if (authResponse) {
@@ -119,7 +124,7 @@ const submitOrder = async (
   return { type: emitResponse.responseTypes.ERROR, message: "The payment was not successful. Not authorization response received.", messageContext: emitResponse.noticeContexts.CHECKOUT };
 };
 
-const extractCustomerData = (orderId: any, billingData: any, shippingData: any, organizationNumber: any, sessionId: any) => {
+const extractCustomerData = (orderId: any, billingData: any, shippingData: any, organizationNumber: any, reference1: any, reference2: any, sessionId: any) => {
   return {
       customer: {
           companyId: organizationNumber || null,
@@ -127,8 +132,8 @@ const extractCustomerData = (orderId: any, billingData: any, shippingData: any, 
           firstName: billingData?.first_name || null,
           lastName: billingData?.last_name || null,
           phone: billingData?.phone || null,
-          reference1: orderId.toString() || null,
-          reference2: "",
+          reference1: reference1 || "",
+          reference2: reference2 || "",
           billingAddress: {
               attentionName: billingData?.first_name || null,
               city: billingData?.city || null,
@@ -176,20 +181,45 @@ const Notice: React.FC<{ message: string }> = ({ message }) => {
 
 const Content: React.FC<any> = (props) => {
   const organizationNumber = useRef<HTMLInputElement>(null);
+  const reference1 = useRef<HTMLInputElement>(null);
+  const reference2 = useRef<HTMLInputElement>(null);
 
   return (
     <div>
       <p>{decodeEntities(description)}</p>
-      <PaymentMethodComponent props={props} organizationNumber={organizationNumber} />
+      <PaymentMethodComponent props={props} organizationNumber={organizationNumber} reference1={reference1} reference2={reference2} />
       <input
-        type="text"
-        className="input-text"
-        name="billing_company_number_block"
-        id="billing_company_number_block"
-        placeholder="Company number"
-        defaultValue=""
-        ref={organizationNumber}
-        required
+      type="text"
+      className="input-text"
+      name="billing_company_number_block"
+      id="billing_company_number_block"
+      placeholder="Company number"
+      defaultValue=""
+      ref={organizationNumber}
+      required
+      style={{ width: "100%", marginBottom: "10px" }}
+      />
+      <input
+      type="text"
+      className="input-text"
+      name="reference_1_block"
+      id="reference_1_block"
+      placeholder="Reference 1"
+      defaultValue=""
+      ref={reference1}
+      required
+      style={{ width: "100%", marginBottom: "10px" }}
+      />
+       <input
+      type="text"
+      className="input-text"
+      name="reference_2_block"
+      id="reference_2_block"
+      placeholder="Reference 2"
+      defaultValue=""
+      ref={reference2}
+      required
+      style={{ width: "100%", marginBottom: "10px" }}
       />
     </div>
   );
